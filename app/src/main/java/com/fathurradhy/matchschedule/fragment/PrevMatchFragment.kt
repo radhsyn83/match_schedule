@@ -21,18 +21,14 @@ import org.jetbrains.anko.support.v4.startActivity
 import org.jetbrains.anko.support.v4.toast
 
 class PrevMatchFragment : Fragment() {
-    lateinit var recyclerView: RecyclerView
-    var root: View? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        root = inflater.inflate(R.layout.fragment_prev_match, container, false)
-        return root
+        return inflater.inflate(R.layout.fragment_prev_match, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView = root?.findViewById(R.id.rv_team)!!
         loadData()
 
         swipeRefreshLayout.onRefresh { loadData() }
@@ -50,8 +46,8 @@ class PrevMatchFragment : Fragment() {
                         matchClick(data)
                     }
                 })
-                recyclerView.layoutManager = LinearLayoutManager(activity!!)
-                recyclerView.adapter = adapter
+                rv_team_prev.layoutManager = LinearLayoutManager(activity!!)
+                rv_team_prev.adapter = adapter
             }
 
             override fun onFailed(msg: String) {

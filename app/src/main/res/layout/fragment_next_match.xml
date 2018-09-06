@@ -7,7 +7,7 @@
     tools:context=".fragment.PrevMatchFragment">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_team"
+        android:id="@+id/rv_team_next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

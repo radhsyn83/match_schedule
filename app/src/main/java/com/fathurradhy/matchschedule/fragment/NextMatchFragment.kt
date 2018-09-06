@@ -3,7 +3,6 @@ package com.fathurradhy.matchschedule.fragment
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,22 +17,18 @@ import kotlinx.android.synthetic.main.fragment_next_match.*
 import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.startActivity
 import org.jetbrains.anko.support.v4.toast
+import org.jetbrains.anko.toast
 
 class NextMatchFragment : Fragment() {
 
-    lateinit var recyclerView: RecyclerView
-    var root: View? = null
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        root = inflater.inflate(R.layout.fragment_next_match, container, false)
-
-        return view
+        return inflater.inflate(R.layout.fragment_next_match, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView = root?.findViewById(R.id.rv_team)!!
+        activity?.toast("ea")
 
         loadData()
 
@@ -51,7 +46,8 @@ class NextMatchFragment : Fragment() {
                         matchClick(data)
                     }
                 })
-                rv_team.adapter = adapter
+                rv_team_next.layoutManager = LinearLayoutManager(activity!!)
+                rv_team_next.adapter = adapter
             }
 
             override fun onFailed(msg: String) {

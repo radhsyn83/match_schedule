@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.fathurradhy.matchschedule.R
@@ -83,6 +84,7 @@ class DetailMatchActivity : AppCompatActivity() {
                         .apply(RequestOptions()
                                 .placeholder(R.drawable.placeholder))
                         .into(home_logo)
+                home_logo.visibility = View.VISIBLE
             }
         }).loadTeamDetail(id)
     }
@@ -96,6 +98,7 @@ class DetailMatchActivity : AppCompatActivity() {
                         .apply(RequestOptions()
                                 .placeholder(R.drawable.placeholder))
                         .into(away_logo)
+                away_logo.visibility = View.VISIBLE
             }
         }).loadTeamDetail(id)
     }
