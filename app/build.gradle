@@ -41,6 +41,9 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.support:cardview-v7:27.1.1'
 
+    implementation 'com.android.support.test.espresso:espresso-idling-resource:3.0.2'
+    androidTestImplementation "com.android.support.test.espresso.idling:idling-concurrent:3.0.2"
+
     //RETROFIT
     implementation('com.squareup.retrofit2:retrofit:2.1.0') {
         exclude module: 'okhttp'

@@ -18,7 +18,7 @@ class TeamImpls(val teamView: TeamView) : TeamPresenter {
             override fun onResponse(call: Call<TeamModel>, response: Response<TeamModel>) {
                 if (response.isSuccessful()) {
                     val res = response.body()
-                    res?.teams?.get(0)?.strTeamBadge?.let { teamView.onSuccess(it) }
+                    res?.let { teamView.onSuccess(it) }
                 }
             }
 

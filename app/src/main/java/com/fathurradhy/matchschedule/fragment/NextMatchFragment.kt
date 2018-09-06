@@ -1,6 +1,7 @@
 package com.fathurradhy.matchschedule.fragment
 
 import android.os.Bundle
+import android.support.test.espresso.idling.CountingIdlingResource
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -13,6 +14,8 @@ import com.fathurradhy.matchschedule.domain.presenter.MatchImpls
 import com.fathurradhy.matchschedule.domain.view.MatchView
 import com.fathurradhy.matchschedule.domain.model.MatchModelResult
 import com.fathurradhy.matchschedule.utils.CustomProgressDialog
+import com.fathurradhy.matchschedule.utils.EspressoIdlingResource
+import com.fathurradhy.matchschedule.utils.EspressoIdlingResource.idlingResource
 import kotlinx.android.synthetic.main.fragment_next_match.*
 import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.startActivity
@@ -28,8 +31,7 @@ class NextMatchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.toast("ea")
-
+        EspressoIdlingResource.increment()
         loadData()
 
         swipeRefreshLayout.onRefresh { loadData() }
@@ -48,6 +50,7 @@ class NextMatchFragment : Fragment() {
                 })
                 rv_team_next.layoutManager = LinearLayoutManager(activity!!)
                 rv_team_next.adapter = adapter
+                EspressoIdlingResource.decrement()
             }
 
             override fun onFailed(msg: String) {

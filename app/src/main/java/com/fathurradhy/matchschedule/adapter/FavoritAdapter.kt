@@ -41,6 +41,7 @@ class FavoritAdapter(private val list: ArrayList<Any?>, val listener: Listener) 
                     else
                         itemView.play.text = "PAST MATCH"
 
+                    itemView.date_match.text = DateUtils.dateFormat(data[0].dateEvent)
                     itemView.time_match.text = DateUtils.timeFormat(data[0].strTime)
                     itemView.home_team.text = data[0].strHomeTeam
                     itemView.away_team.text = data[0].strAwayTeam

@@ -11,12 +11,10 @@ import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.fathurradhy.matchschedule.R
+import com.fathurradhy.matchschedule.domain.model.TeamModel
 import com.fathurradhy.matchschedule.domain.presenter.TeamImpls
 import com.fathurradhy.matchschedule.domain.view.TeamView
-import com.fathurradhy.matchschedule.utils.CustomProgressDialog
-import com.fathurradhy.matchschedule.utils.DateUtils
-import com.fathurradhy.matchschedule.utils.Favorite
-import com.fathurradhy.matchschedule.utils.database
+import com.fathurradhy.matchschedule.utils.*
 import kotlinx.android.synthetic.main.activity_detail_match.*
 import org.jetbrains.anko.db.*
 import org.jetbrains.anko.design.snackbar
@@ -77,24 +75,26 @@ class DetailMatchActivity : AppCompatActivity() {
     }
 
     private fun getHomeLogo(id: String) {
+        EspressoIdlingResource.increment()
         TeamImpls(object : TeamView{
-            override fun onSuccess(teamImg: String) {
+            override fun onSuccess(teamModel: TeamModel) {
                 Glide.with(this@DetailMatchActivity)
-                        .load(teamImg)
+                        .load(teamModel.teams[0].strTeamBadge)
                         .apply(RequestOptions()
                                 .placeholder(R.drawable.placeholder))
                         .into(home_logo)
                 home_logo.visibility = View.VISIBLE
+                EspressoIdlingResource.decrement()
             }
         }).loadTeamDetail(id)
     }
 
     private fun getAwayLogo(id: String) {
         TeamImpls(object : TeamView{
-            override fun onSuccess(teamImg: String) {
+            override fun onSuccess(teamModel: TeamModel) {
                 CustomProgressDialog.stopDialog()
                 Glide.with(this@DetailMatchActivity)
-                        .load(teamImg)
+                        .load(teamModel.teams[0].strTeamBadge)
                         .apply(RequestOptions()
                                 .placeholder(R.drawable.placeholder))
                         .into(away_logo)

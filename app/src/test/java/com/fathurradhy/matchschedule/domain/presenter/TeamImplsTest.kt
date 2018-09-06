@@ -1,12 +1,12 @@
 package com.fathurradhy.matchschedule.domain.presenter
 
+import com.fathurradhy.matchschedule.domain.model.TeamModel
 import com.fathurradhy.matchschedule.domain.view.TeamView
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
-
 
 class TeamImplsTest {
 
@@ -25,8 +25,12 @@ class TeamImplsTest {
 
     @Test
     fun loadTeamDetail() {
-        val teamId = "133612"
+        val teams = TeamModel(arrayListOf())
+
+        val teamId = "133613"
 
         teamPresenter.loadTeamDetail(teamId)
+
+        Mockito.verify(teamView).onSuccess(teams)
     }
 }
