@@ -4,18 +4,19 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.fathurradhy.matchschedule.R
-import com.fathurradhy.matchschedule.domain.model.MatchModelResult
+import com.fathurradhy.matchschedule.entity.EventsItem
 import com.fathurradhy.matchschedule.utils.DateUtils
 import kotlinx.android.synthetic.main.item_prev_match.view.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MatchAdapter(private val list: ArrayList<MatchModelResult>, val listener: Listener) : RecyclerView.Adapter<MatchAdapter.ViewHolder>() {
+class MatchAdapter(private val list: List<EventsItem>, val listener: Listener) : RecyclerView.Adapter<MatchAdapter.ViewHolder>() {
 
     interface Listener {
-        fun onMatchClick(data: MatchModelResult)
+        fun onMatchClick(data: EventsItem, home_name: TextView, away_name: TextView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder{
@@ -30,15 +31,15 @@ class MatchAdapter(private val list: ArrayList<MatchModelResult>, val listener: 
     }
 
     inner class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
-        fun bind(data: MatchModelResult) {
-            itemView.date_match.text = DateUtils.dateFormat(data.dateEvent)
-            itemView.time_match.text = DateUtils.timeFormat(data.strTime)
+        fun bind(data: EventsItem) {
+            itemView.date_match.text = data.dateEvent?.let { DateUtils.dateFormat(it) }
+            itemView.time_match.text = data.strTime?.let { DateUtils.timeFormat(it) }
             itemView.home_team.text = data.strHomeTeam
             itemView.away_team.text = data.strAwayTeam
             itemView.home_score.text = data.intHomeScore
             itemView.away_score.text = data.intAwayScore
 
-            itemView.cardview.onClick { listener.onMatchClick(data) }
+            itemView.cardview.onClick { listener.onMatchClick(data, itemView.home_team, itemView.away_team) }
         }
     }
 

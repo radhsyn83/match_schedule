@@ -11,15 +11,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activity.SpalshActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.MainActivity"/>
         <activity android:name=".activity.DetailMatchActivity" />
-        <activity android:name=".activity.FavoritActivity"></activity>
+        <activity android:name=".activity.FavoritActivity" />
+        <activity android:name=".activity.TeamActivity" />
     </application>
 
 </manifest>

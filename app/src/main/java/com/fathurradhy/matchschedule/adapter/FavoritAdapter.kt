@@ -1,23 +1,25 @@
 package com.fathurradhy.matchschedule.adapter
 
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.fathurradhy.matchschedule.R
-import com.fathurradhy.matchschedule.domain.model.MatchModelResult
-import com.fathurradhy.matchschedule.domain.presenter.MatchImpls
-import com.fathurradhy.matchschedule.domain.view.MatchView
+import com.fathurradhy.matchschedule.entity.EventsItem
+import com.fathurradhy.matchschedule.entity.MatchResponse
+import com.fathurradhy.matchschedule.match.MatchPresenter
+import com.fathurradhy.matchschedule.match.MatchView
+import com.fathurradhy.matchschedule.test.repository.RetrofitRepository
 import com.fathurradhy.matchschedule.utils.DateUtils
 import kotlinx.android.synthetic.main.item_favorit.view.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
-import kotlin.collections.ArrayList
 
 class FavoritAdapter(private val list: ArrayList<Any?>, val listener: Listener) : RecyclerView.Adapter<FavoritAdapter.ViewHolder>() {
 
+    lateinit var matchPresenter: MatchPresenter
+
     interface Listener {
-        fun onMatchClick(data: MatchModelResult)
+        fun onMatchClick(data: EventsItem)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder{
@@ -34,32 +36,36 @@ class FavoritAdapter(private val list: ArrayList<Any?>, val listener: Listener) 
     inner class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
         fun bind(data: Any?) {
 
-            MatchImpls(object : MatchView{
-                override fun onSuccess(data: ArrayList<MatchModelResult>) {
-                    if (data[0].intAwayScore == null && data[0].intHomeScore == null)
+            matchPresenter = MatchPresenter(object : MatchView {
+                override fun onShowLoading() {}
+
+                override fun onHideLoading() {}
+
+                override fun onDataLoaded(data: MatchResponse?) {
+                    val match = data?.events?.get(0)
+
+                    if (match?.intAwayScore == null && match?.intHomeScore == null)
                         itemView.play.text = "COMING SOON"
                     else
                         itemView.play.text = "PAST MATCH"
 
-                    itemView.date_match.text = DateUtils.dateFormat(data[0].dateEvent)
-                    itemView.time_match.text = DateUtils.timeFormat(data[0].strTime)
-                    itemView.home_team.text = data[0].strHomeTeam
-                    itemView.away_team.text = data[0].strAwayTeam
-                    itemView.home_score.text = data[0].intHomeScore
-                    itemView.away_score.text = data[0].intAwayScore
+                    itemView.date_match.text = match?.dateEvent?.let { DateUtils.dateFormat(it) }
+                    itemView.time_match.text = match?.strTime?.let { DateUtils.timeFormat(it) }
+                    itemView.home_team.text = match?.strHomeTeam
+                    itemView.away_team.text = match?.strAwayTeam
+                    itemView.home_score.text = match?.intHomeScore
+                    itemView.away_score.text = match?.intAwayScore
                     itemView.container_success.visibility = View.VISIBLE
                     itemView.container_onload.visibility = View.GONE
 
-                    itemView.cardview.onClick { listener.onMatchClick(data[0]) }
-
+                    itemView.cardview.onClick { match?.let { it1 -> listener.onMatchClick(it1) } }
                 }
 
-                override fun onFailed(msg: String) {
-                    Log.e("Favorite Adapter", msg)
-                }
-            }).loadMatchById(data.toString())
+                override fun onDataError() {}
+            }, RetrofitRepository())
+
+            matchPresenter.getDetailMatch(data.toString())
 
         }
     }
-
 }

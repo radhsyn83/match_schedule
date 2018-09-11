@@ -1,8 +1,8 @@
 package com.fathurradhy.matchschedule.activity
 
 import android.database.sqlite.SQLiteConstraintException
+import android.os.Build
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
@@ -11,17 +11,54 @@ import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.fathurradhy.matchschedule.R
-import com.fathurradhy.matchschedule.domain.model.TeamModel
-import com.fathurradhy.matchschedule.domain.presenter.TeamImpls
-import com.fathurradhy.matchschedule.domain.view.TeamView
+import com.fathurradhy.matchschedule.entity.TeamResponse
+import com.fathurradhy.matchschedule.match.TeamPresenter
+import com.fathurradhy.matchschedule.match.TeamView
+import com.fathurradhy.matchschedule.test.repository.RetrofitRepository
 import com.fathurradhy.matchschedule.utils.*
 import kotlinx.android.synthetic.main.activity_detail_match.*
 import org.jetbrains.anko.db.*
 import org.jetbrains.anko.design.snackbar
-import org.jetbrains.anko.toast
 
-class DetailMatchActivity : AppCompatActivity() {
+class DetailMatchActivity : AppCompatActivity(), TeamView {
 
+    override fun onShowLoading() {}
+
+    override fun onHideLoading() {}
+
+    override fun onDataLoaded(data: TeamResponse?, side: String) {
+        if (side.equals("home")) {
+            Glide.with(this@DetailMatchActivity)
+                    .load(data?.teams?.get(0)?.strTeamBadge)
+                    .apply(RequestOptions()
+                            .placeholder(R.drawable.placeholder))
+                    .into(home_logo)
+            home_logo.visibility = View.VISIBLE
+            isHome = true
+        } else {
+            Glide.with(this@DetailMatchActivity)
+                    .load(data?.teams?.get(0)?.strTeamBadge)
+                    .apply(RequestOptions()
+                            .placeholder(R.drawable.placeholder))
+                    .into(away_logo)
+            away_logo.visibility = View.VISIBLE
+            isAway = true
+        }
+
+        if (isAway && isHome) {
+            EspressoIdlingResource.decrement()
+        }
+
+    }
+
+    override fun onDataError() {
+
+    }
+
+    lateinit var teamPresenter: TeamPresenter
+
+    private var isAway = false
+    private var isHome = false
     private var menuItem: MenuItem? = null
     private var isFavorite: Boolean = false
     private lateinit var idEvent: String
@@ -35,12 +72,21 @@ class DetailMatchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_match)
         setSupportActionBar(toolbar)
-        getSupportActionBar()!!.setDisplayHomeAsUpEnabled(true)
-        getSupportActionBar()!!.setDisplayShowHomeEnabled(true)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowHomeEnabled(true)
+
+        if (intent.extras!!.getString("EXTRA_ANIMAL_IMAGE_TRANSITION_NAME") != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                home_team.setTransitionName(intent.extras!!.getString("HOME_NAME"))
+                away_team.setTransitionName(intent.extras!!.getString("AWAY_NAME"))
+            }
+        }
+
+        EspressoIdlingResource.increment()
+
+        teamPresenter = TeamPresenter(this, RetrofitRepository())
 
         idEvent = intent.getStringExtra("idEvent")
-
-        CustomProgressDialog.showDialog(this)
 
         getHomeLogo(intent.getStringExtra("idHomeTeam"))
         getAwayLogo(intent.getStringExtra("idAwayTeam"))
@@ -75,32 +121,11 @@ class DetailMatchActivity : AppCompatActivity() {
     }
 
     private fun getHomeLogo(id: String) {
-        EspressoIdlingResource.increment()
-        TeamImpls(object : TeamView{
-            override fun onSuccess(teamModel: TeamModel) {
-                Glide.with(this@DetailMatchActivity)
-                        .load(teamModel.teams[0].strTeamBadge)
-                        .apply(RequestOptions()
-                                .placeholder(R.drawable.placeholder))
-                        .into(home_logo)
-                home_logo.visibility = View.VISIBLE
-                EspressoIdlingResource.decrement()
-            }
-        }).loadTeamDetail(id)
+        teamPresenter.getEmblemHome(id)
     }
 
     private fun getAwayLogo(id: String) {
-        TeamImpls(object : TeamView{
-            override fun onSuccess(teamModel: TeamModel) {
-                CustomProgressDialog.stopDialog()
-                Glide.with(this@DetailMatchActivity)
-                        .load(teamModel.teams[0].strTeamBadge)
-                        .apply(RequestOptions()
-                                .placeholder(R.drawable.placeholder))
-                        .into(away_logo)
-                away_logo.visibility = View.VISIBLE
-            }
-        }).loadTeamDetail(id)
+        teamPresenter.getEmblemAway(id)
     }
 
     private fun addToFavorite(){

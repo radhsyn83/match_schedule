@@ -1,28 +1,32 @@
 package com.fathurradhy.matchschedule.fragment
 
+import android.os.Build
 import android.os.Bundle
-import android.support.test.espresso.idling.CountingIdlingResource
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.fathurradhy.matchschedule.R
 import com.fathurradhy.matchschedule.activity.DetailMatchActivity
 import com.fathurradhy.matchschedule.adapter.MatchAdapter
-import com.fathurradhy.matchschedule.domain.presenter.MatchImpls
-import com.fathurradhy.matchschedule.domain.view.MatchView
-import com.fathurradhy.matchschedule.domain.model.MatchModelResult
+import com.fathurradhy.matchschedule.entity.EventsItem
+import com.fathurradhy.matchschedule.entity.MatchResponse
+import com.fathurradhy.matchschedule.match.MatchPresenter
+import com.fathurradhy.matchschedule.match.MatchView
+import com.fathurradhy.matchschedule.test.repository.RetrofitRepository
 import com.fathurradhy.matchschedule.utils.CustomProgressDialog
 import com.fathurradhy.matchschedule.utils.EspressoIdlingResource
-import com.fathurradhy.matchschedule.utils.EspressoIdlingResource.idlingResource
 import kotlinx.android.synthetic.main.fragment_next_match.*
-import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.startActivity
 import org.jetbrains.anko.support.v4.toast
-import org.jetbrains.anko.toast
 
-class NextMatchFragment : Fragment() {
+class NextMatchFragment : Fragment(), MatchView, MatchAdapter.Listener {
+
+    lateinit var matchPresenter: MatchPresenter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -31,36 +35,32 @@ class NextMatchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         EspressoIdlingResource.increment()
-        loadData()
 
-        swipeRefreshLayout.onRefresh { loadData() }
-    }
-
-    private fun loadData() {
-        swipeRefreshLayout.isRefreshing = false
-
-        MatchImpls(object : MatchView {
-            override fun onSuccess(matchModelResult: ArrayList<MatchModelResult>) {
-                CustomProgressDialog.stopDialog()
-                val adapter = MatchAdapter(matchModelResult, object : MatchAdapter.Listener{
-                    override fun onMatchClick(data: MatchModelResult) {
-                        matchClick(data)
-                    }
-                })
-                rv_team_next.layoutManager = LinearLayoutManager(activity!!)
-                rv_team_next.adapter = adapter
-                EspressoIdlingResource.decrement()
-            }
-
-            override fun onFailed(msg: String) {
-                toast(msg)
-            }
-        }).loadNextMatch()
+        matchPresenter = MatchPresenter(this , RetrofitRepository())
+        matchPresenter.getNextMatch("4328")
 
     }
 
-    private fun matchClick(data: MatchModelResult) {
+    override fun onShowLoading() {
+        CustomProgressDialog.showDialog(activity!!)
+    }
+
+    override fun onHideLoading() {
+        CustomProgressDialog.stopDialog()
+    }
+
+    override fun onDataLoaded(data: MatchResponse?) {
+        rv_team_next.layoutManager = LinearLayoutManager(activity!!)
+        rv_team_next.adapter = data!!.events?.let { MatchAdapter(it, this) }
+        EspressoIdlingResource.decrement()
+    }
+
+    override fun onDataError() { toast("Error") }
+
+    override fun onMatchClick(data: EventsItem, home_name: TextView, away_name: TextView) {
+
         startActivity<DetailMatchActivity>(
                 "idHomeTeam" to data.idHomeTeam,
                 "idAwayTeam" to data.idAwayTeam,
@@ -73,6 +73,7 @@ class NextMatchFragment : Fragment() {
                 "dateEvent" to data.dateEvent,
                 "intHomeShots" to data.intHomeShots,
                 "intAwayShots" to data.intAwayShots,
+                "strTime" to data.strTime,
                 "strHomeYellowCards" to data.strHomeYellowCards,
                 "strAwayYellowCards" to data.strAwayYellowCards,
                 "strHomeRedCards" to data.strHomeRedCards,
@@ -89,8 +90,8 @@ class NextMatchFragment : Fragment() {
                 "strAwayLineupMidfield" to data.strAwayLineupMidfield,
                 "strAwayLineupForward" to data.strAwayLineupForward,
                 "strAwayLineupSubstitutes" to data.strAwayLineupSubstitutes,
-                "strTime" to data.strTime
-
+                "HOME_NAME" to ViewCompat.getTransitionName(home_name),
+                "AWAY_NAME" to ViewCompat.getTransitionName(away_name)
         )
     }
 

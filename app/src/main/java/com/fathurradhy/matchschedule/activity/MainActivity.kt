@@ -1,6 +1,7 @@
 package com.fathurradhy.matchschedule.activity
 
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
@@ -14,8 +15,6 @@ import org.jetbrains.anko.startActivity
 
 
 class MainActivity : AppCompatActivity() {
-
-    private var menuItem: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,8 +36,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.favorit_menu, menu)
-        menuItem = menu?.findItem(R.id.add_to_favorite)
+        menuInflater.inflate(R.menu.main_menu, menu)
         return true
     }
 
@@ -46,6 +44,11 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.add_to_favorite -> {
                 startActivity<FavoritActivity>()
+                true
+            }
+
+            R.id.btn_team -> {
+                startActivity<TeamActivity>()
                 true
             }
 

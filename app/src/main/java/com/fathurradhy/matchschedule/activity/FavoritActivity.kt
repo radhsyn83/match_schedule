@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import com.fathurradhy.matchschedule.R
 import com.fathurradhy.matchschedule.adapter.FavoritAdapter
-import com.fathurradhy.matchschedule.domain.model.MatchModelResult
+import com.fathurradhy.matchschedule.entity.EventsItem
 import com.fathurradhy.matchschedule.utils.Favorite
 import com.fathurradhy.matchschedule.utils.database
 import kotlinx.android.synthetic.main.activity_favorit.*
@@ -59,7 +59,7 @@ class FavoritActivity : AppCompatActivity() {
                         }
 
                 val adapter = FavoritAdapter(idEvent, object : FavoritAdapter.Listener{
-                    override fun onMatchClick(data: MatchModelResult) {
+                    override fun onMatchClick(data: EventsItem) {
                         matchClick(data)
                     }
                 })
@@ -73,7 +73,7 @@ class FavoritActivity : AppCompatActivity() {
         }
     }
 
-    private fun matchClick(data: MatchModelResult) {
+    private fun matchClick(data: EventsItem) {
         startActivity<DetailMatchActivity>(
                 "idHomeTeam" to data.idHomeTeam,
                 "idAwayTeam" to data.idAwayTeam,
