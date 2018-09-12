@@ -59,7 +59,7 @@ class NextMatchFragment : Fragment(), MatchView, MatchAdapter.Listener {
 
     override fun onDataError() { toast("Error") }
 
-    override fun onMatchClick(data: EventsItem, home_name: TextView, away_name: TextView) {
+    override fun onMatchClick(data: EventsItem) {
 
         startActivity<DetailMatchActivity>(
                 "idHomeTeam" to data.idHomeTeam,
@@ -89,9 +89,7 @@ class NextMatchFragment : Fragment(), MatchView, MatchAdapter.Listener {
                 "strAwayLineupDefense" to data.strAwayLineupDefense,
                 "strAwayLineupMidfield" to data.strAwayLineupMidfield,
                 "strAwayLineupForward" to data.strAwayLineupForward,
-                "strAwayLineupSubstitutes" to data.strAwayLineupSubstitutes,
-                "HOME_NAME" to ViewCompat.getTransitionName(home_name),
-                "AWAY_NAME" to ViewCompat.getTransitionName(away_name)
+                "strAwayLineupSubstitutes" to data.strAwayLineupSubstitutes
         )
     }
 

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.fathurradhy.matchschedule.R
 import com.fathurradhy.matchschedule.entity.EventsItem
+import com.fathurradhy.matchschedule.match.TeamPresenter
 import com.fathurradhy.matchschedule.utils.DateUtils
 import kotlinx.android.synthetic.main.item_prev_match.view.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
@@ -15,8 +16,10 @@ import java.util.*
 
 class MatchAdapter(private val list: List<EventsItem>, val listener: Listener) : RecyclerView.Adapter<MatchAdapter.ViewHolder>() {
 
+    lateinit var teamPresenter: TeamPresenter
+
     interface Listener {
-        fun onMatchClick(data: EventsItem, home_name: TextView, away_name: TextView)
+        fun onMatchClick(data: EventsItem)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder{
@@ -39,7 +42,7 @@ class MatchAdapter(private val list: List<EventsItem>, val listener: Listener) :
             itemView.home_score.text = data.intHomeScore
             itemView.away_score.text = data.intAwayScore
 
-            itemView.cardview.onClick { listener.onMatchClick(data, itemView.home_team, itemView.away_team) }
+            itemView.cardview.onClick { listener.onMatchClick(data) }
         }
     }
 
