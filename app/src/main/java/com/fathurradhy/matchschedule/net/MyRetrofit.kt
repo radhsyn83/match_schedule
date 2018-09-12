@@ -1,4 +1,4 @@
-package com.fathurradhy.matchschedule.network
+package com.fathurradhy.matchschedule.net
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

@@ -4,28 +4,37 @@ package com.fathurradhy.matchschedule.fragment
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewCompat
-import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import com.fathurradhy.matchschedule.R
 import com.fathurradhy.matchschedule.activity.DetailMatchActivity
-import com.fathurradhy.matchschedule.adapter.Match2Adapter
 import com.fathurradhy.matchschedule.adapter.MatchAdapter
-import com.fathurradhy.matchschedule.entity.EventsItem
-import com.fathurradhy.matchschedule.entity.MatchResponse
-import com.fathurradhy.matchschedule.match.MatchPresenter
-import com.fathurradhy.matchschedule.match.MatchView
+import com.fathurradhy.matchschedule.mvp.model.LeaguesResponse
+import com.fathurradhy.matchschedule.mvp.model.MatchItem
+import com.fathurradhy.matchschedule.mvp.model.MatchResponse
+import com.fathurradhy.matchschedule.mvp.presenter.LeaguesPresenter
+import com.fathurradhy.matchschedule.mvp.presenter.MatchPresenter
+import com.fathurradhy.matchschedule.test.repository.LeaguesView
+import com.fathurradhy.matchschedule.test.repository.MatchView
 import com.fathurradhy.matchschedule.test.repository.RetrofitRepository
 import com.fathurradhy.matchschedule.utils.CustomProgressDialog
+import com.fathurradhy.matchschedule.utils.EspressoIdlingResource
 import kotlinx.android.synthetic.main.fragment_prev_match.*
+import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.startActivity
 import org.jetbrains.anko.support.v4.toast
 
-class PrevMatchFragment : Fragment(), MatchView, Match2Adapter.Listener {
+class PrevMatchFragment : Fragment(), MatchView, MatchAdapter.Listener, AdapterView.OnItemSelectedListener {
 
     lateinit var matchPresenter: MatchPresenter
+    private val leaguesName = ArrayList<String>()
+    private val leaguesId = ArrayList<String>()
+    private var currentLeguesId = ""
+    private var firtTimeLoad = true;
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -37,57 +46,90 @@ class PrevMatchFragment : Fragment(), MatchView, Match2Adapter.Listener {
 
         matchPresenter = MatchPresenter(this , RetrofitRepository())
 
-        matchPresenter.getPrevMatch("4328")
-
+        swipeRefreshLayout.onRefresh {
+            CustomProgressDialog.showDialog(activity!!)
+            matchPresenter.getNextMatch(currentLeguesId)
+            swipeRefreshLayout.isRefreshing = false
+        }
+        initSpinner()
     }
 
-    override fun onShowLoading() {
-        CustomProgressDialog.showDialog(activity!!)
-    }
+    private fun initSpinner() {
+        leagues.setOnItemSelectedListener(this)
+        LeaguesPresenter(object : LeaguesView {
+            override fun onDataLoaded(data: LeaguesResponse?) {
+                val item = data?.leagues
 
-    override fun onHideLoading() {
-        CustomProgressDialog.stopDialog()
+                for (i in 0 until 9) {
+                    if (item?.get(i)?.strSport == "Soccer") {
+                        leaguesId.add(item[i].idLeague.toString())
+                        item[i].strLeague?.let { leaguesName.add(it) }
+                    }
+                }
+
+                val adapter = ArrayAdapter<String>(activity,
+                        R.layout.spinner_item, leaguesName)
+
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                leagues.adapter = adapter
+
+            }
+
+            override fun onDataError() {}
+        }, RetrofitRepository()).getLeagues()
     }
 
     override fun onDataLoaded(data: MatchResponse?) {
-        rv_team_prev.layoutManager = LinearLayoutManager(activity!!)
-        rv_team_prev.adapter = data!!.events?.let { Match2Adapter(activity!!,it, this) }
+        CustomProgressDialog.stopDialog()
+        rv_team_prev.layoutManager = GridLayoutManager(activity!!, 2, GridLayoutManager.VERTICAL, false)
+        rv_team_prev.adapter = data!!.events?.let { MatchAdapter(activity!!,it, this) }
     }
 
     override fun onDataError() { toast("Error") }
 
-    override fun onMatchClick(data: EventsItem) {
-//        startActivity<DetailMatchActivity>(
-//                "idHomeTeam" to data.idHomeTeam,
-//                "idAwayTeam" to data.idAwayTeam,
-//                "idEvent" to data.idEvent,
-//                "strHomeTeam" to data.strHomeTeam,
-//                "strAwayTeam" to data.strAwayTeam,
-//                "intHomeScore" to data.intHomeScore,
-//                "intAwayScore" to data.intAwayScore,
-//                "strDate" to data.strDate,
-//                "dateEvent" to data.dateEvent,
-//                "intHomeShots" to data.intHomeShots,
-//                "intAwayShots" to data.intAwayShots,
-//                "strTime" to data.strTime,
-//                "strHomeYellowCards" to data.strHomeYellowCards,
-//                "strAwayYellowCards" to data.strAwayYellowCards,
-//                "strHomeRedCards" to data.strHomeRedCards,
-//                "strAwayRedCards" to data.strAwayRedCards,
-//                "strHomeGoalDetails" to data.strHomeGoalDetails,
-//                "strAwayGoalDetails" to data.strAwayGoalDetails,
-//                "strHomeLineupGoalkeeper" to data.strHomeLineupGoalkeeper,
-//                "strHomeLineupDefense" to data.strHomeLineupDefense,
-//                "strHomeLineupMidfield" to data.strHomeLineupMidfield,
-//                "strHomeLineupForward" to data.strHomeLineupForward,
-//                "strHomeLineupSubstitutes" to data.strHomeLineupSubstitutes,
-//                "strAwayLineupGoalkeeper" to data.strAwayLineupGoalkeeper,
-//                "strAwayLineupDefense" to data.strAwayLineupDefense,
-//                "strAwayLineupMidfield" to data.strAwayLineupMidfield,
-//                "strAwayLineupForward" to data.strAwayLineupForward,
-//                "strAwayLineupSubstitutes" to data.strAwayLineupSubstitutes,
-//                "HOME_NAME" to ViewCompat.getTransitionName(home_name),
-//                "AWAY_NAME" to ViewCompat.getTransitionName(away_name)
-//        )
+    override fun onMatchClick(data: MatchItem) {
+        startActivity<DetailMatchActivity>(
+                "idHomeTeam" to data.idHomeTeam,
+                "idAwayTeam" to data.idAwayTeam,
+                "idEvent" to data.idEvent,
+                "strHomeTeam" to data.strHomeTeam,
+                "strAwayTeam" to data.strAwayTeam,
+                "intHomeScore" to data.intHomeScore,
+                "intAwayScore" to data.intAwayScore,
+                "strDate" to data.strDate,
+                "dateEvent" to data.dateEvent,
+                "intHomeShots" to data.intHomeShots,
+                "intAwayShots" to data.intAwayShots,
+                "strTime" to data.strTime,
+                "strHomeYellowCards" to data.strHomeYellowCards,
+                "strAwayYellowCards" to data.strAwayYellowCards,
+                "strHomeRedCards" to data.strHomeRedCards,
+                "strAwayRedCards" to data.strAwayRedCards,
+                "strHomeGoalDetails" to data.strHomeGoalDetails,
+                "strAwayGoalDetails" to data.strAwayGoalDetails,
+                "strHomeLineupGoalkeeper" to data.strHomeLineupGoalkeeper,
+                "strHomeLineupDefense" to data.strHomeLineupDefense,
+                "strHomeLineupMidfield" to data.strHomeLineupMidfield,
+                "strHomeLineupForward" to data.strHomeLineupForward,
+                "strHomeLineupSubstitutes" to data.strHomeLineupSubstitutes,
+                "strAwayLineupGoalkeeper" to data.strAwayLineupGoalkeeper,
+                "strAwayLineupDefense" to data.strAwayLineupDefense,
+                "strAwayLineupMidfield" to data.strAwayLineupMidfield,
+                "strAwayLineupForward" to data.strAwayLineupForward,
+                "strAwayLineupSubstitutes" to data.strAwayLineupSubstitutes
+        )
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        if (!firtTimeLoad) {
+            CustomProgressDialog.showDialog(activity!!)
+        }
+
+        currentLeguesId = leaguesId[position]
+        matchPresenter.getNextMatch(currentLeguesId)
+
+        firtTimeLoad = false
     }
 }

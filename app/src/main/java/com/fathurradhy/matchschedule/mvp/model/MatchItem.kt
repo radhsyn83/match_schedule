@@ -1,20 +1,19 @@
-package com.fathurradhy.matchschedule.entity
+package com.fathurradhy.matchschedule.mvp.model
 
 import com.google.gson.annotations.SerializedName
 
-data class EventsItem(
-
+data class MatchItem(
 	@field:SerializedName("intHomeShots")
-	val intHomeShots: Any? = null,
+	val intHomeShots: String? = null,
 
 	@field:SerializedName("strSport")
 	val strSport: String? = null,
 
 	@field:SerializedName("strHomeLineupDefense")
-	val strHomeLineupDefense: Any? = null,
+	val strHomeLineupDefense: String? = null,
 
 	@field:SerializedName("strAwayLineupSubstitutes")
-	val strAwayLineupSubstitutes: Any? = null,
+	val strAwayLineupSubstitutes: String? = null,
 
 	@field:SerializedName("idLeague")
 	val idLeague: String? = null,
@@ -23,19 +22,19 @@ data class EventsItem(
 	val idSoccerXML: String? = null,
 
 	@field:SerializedName("strHomeLineupForward")
-	val strHomeLineupForward: Any? = null,
+	val strHomeLineupForward: String? = null,
 
 	@field:SerializedName("strTVStation")
-	val strTVStation: Any? = null,
+	val strTVStation: String? = null,
 
 	@field:SerializedName("strHomeGoalDetails")
-	val strHomeGoalDetails: Any? = null,
+	val strHomeGoalDetails: String? = null,
 
 	@field:SerializedName("strAwayLineupGoalkeeper")
-	val strAwayLineupGoalkeeper: Any? = null,
+	val strAwayLineupGoalkeeper: String? = null,
 
 	@field:SerializedName("strAwayLineupMidfield")
-	val strAwayLineupMidfield: Any? = null,
+	val strAwayLineupMidfield: String? = null,
 
 	@field:SerializedName("idEvent")
 	val idEvent: String? = null,
@@ -44,7 +43,7 @@ data class EventsItem(
 	val intRound: String? = null,
 
 	@field:SerializedName("strHomeYellowCards")
-	val strHomeYellowCards: Any? = null,
+	val strHomeYellowCards: String? = null,
 
 	@field:SerializedName("idHomeTeam")
 	val idHomeTeam: String? = null,
@@ -56,46 +55,46 @@ data class EventsItem(
 	val dateEvent: String? = null,
 
 	@field:SerializedName("strCountry")
-	val strCountry: Any? = null,
+	val strCountry: String? = null,
 
 	@field:SerializedName("strAwayTeam")
 	val strAwayTeam: String? = null,
 
 	@field:SerializedName("strHomeLineupMidfield")
-	val strHomeLineupMidfield: Any? = null,
+	val strHomeLineupMidfield: String? = null,
 
 	@field:SerializedName("strDate")
 	val strDate: String? = null,
 
 	@field:SerializedName("strHomeFormation")
-	val strHomeFormation: Any? = null,
+	val strHomeFormation: String? = null,
 
 	@field:SerializedName("strMap")
-	val strMap: Any? = null,
+	val strMap: String? = null,
 
 	@field:SerializedName("idAwayTeam")
 	val idAwayTeam: String? = null,
 
 	@field:SerializedName("strAwayRedCards")
-	val strAwayRedCards: Any? = null,
+	val strAwayRedCards: String? = null,
 
 	@field:SerializedName("strBanner")
-	val strBanner: Any? = null,
+	val strBanner: String? = null,
 
 	@field:SerializedName("strFanart")
-	val strFanart: Any? = null,
+	val strFanart: String? = null,
 
 	@field:SerializedName("strDescriptionEN")
-	val strDescriptionEN: Any? = null,
+	val strDescriptionEN: String? = null,
 
 	@field:SerializedName("strResult")
-	val strResult: Any? = null,
+	val strResult: String? = null,
 
 	@field:SerializedName("strCircuit")
-	val strCircuit: Any? = null,
+	val strCircuit: String? = null,
 
 	@field:SerializedName("intAwayShots")
-	val intAwayShots: Any? = null,
+	val intAwayShots: String? = null,
 
 	@field:SerializedName("strFilename")
 	val strFilename: String? = null,
@@ -104,10 +103,10 @@ data class EventsItem(
 	val strTime: String? = null,
 
 	@field:SerializedName("strAwayGoalDetails")
-	val strAwayGoalDetails: Any? = null,
+	val strAwayGoalDetails: String? = null,
 
 	@field:SerializedName("strAwayLineupForward")
-	val strAwayLineupForward: Any? = null,
+	val strAwayLineupForward: String? = null,
 
 	@field:SerializedName("strLocked")
 	val strLocked: String? = null,
@@ -116,34 +115,34 @@ data class EventsItem(
 	val strSeason: String? = null,
 
 	@field:SerializedName("intSpectators")
-	val intSpectators: Any? = null,
+	val intSpectators: String? = null,
 
 	@field:SerializedName("strHomeRedCards")
-	val strHomeRedCards: Any? = null,
+	val strHomeRedCards: String? = null,
 
 	@field:SerializedName("strHomeLineupGoalkeeper")
-	val strHomeLineupGoalkeeper: Any? = null,
+	val strHomeLineupGoalkeeper: String? = null,
 
 	@field:SerializedName("strHomeLineupSubstitutes")
-	val strHomeLineupSubstitutes: Any? = null,
+	val strHomeLineupSubstitutes: String? = null,
 
 	@field:SerializedName("strAwayFormation")
-	val strAwayFormation: Any? = null,
+	val strAwayFormation: String? = null,
 
 	@field:SerializedName("strEvent")
 	val strEvent: String? = null,
 
 	@field:SerializedName("strAwayYellowCards")
-	val strAwayYellowCards: Any? = null,
+	val strAwayYellowCards: String? = null,
 
 	@field:SerializedName("strAwayLineupDefense")
-	val strAwayLineupDefense: Any? = null,
+	val strAwayLineupDefense: String? = null,
 
 	@field:SerializedName("strHomeTeam")
 	val strHomeTeam: String? = null,
 
 	@field:SerializedName("strThumb")
-	val strThumb: Any? = null,
+	val strThumb: String? = null,
 
 	@field:SerializedName("strLeague")
 	val strLeague: String? = null,
@@ -152,8 +151,8 @@ data class EventsItem(
 	val intAwayScore: String? = null,
 
 	@field:SerializedName("strCity")
-	val strCity: Any? = null,
+	val strCity: String? = null,
 
 	@field:SerializedName("strPoster")
-	val strPoster: Any? = null
+	val strPoster: String? = null
 )

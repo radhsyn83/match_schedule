@@ -11,21 +11,16 @@ import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.fathurradhy.matchschedule.R
-import com.fathurradhy.matchschedule.entity.TeamResponse
-import com.fathurradhy.matchschedule.match.TeamPresenter
-import com.fathurradhy.matchschedule.match.TeamView
+import com.fathurradhy.matchschedule.mvp.model.TeamResponse
+import com.fathurradhy.matchschedule.mvp.presenter.TeamPresenter
 import com.fathurradhy.matchschedule.test.repository.RetrofitRepository
+import com.fathurradhy.matchschedule.test.repository.TeamView
 import com.fathurradhy.matchschedule.utils.*
 import kotlinx.android.synthetic.main.activity_detail_match.*
 import org.jetbrains.anko.db.*
 import org.jetbrains.anko.design.snackbar
 
-class DetailMatchActivity : AppCompatActivity(), TeamView {
-
-    override fun onShowLoading() {}
-
-    override fun onHideLoading() {}
-
+class DetailMatchActivity : AppCompatActivity(), TeamView<TeamResponse?> {
     override fun onDataLoaded(data: TeamResponse?, side: String) {
         if (side.equals("home")) {
             Glide.with(this@DetailMatchActivity)

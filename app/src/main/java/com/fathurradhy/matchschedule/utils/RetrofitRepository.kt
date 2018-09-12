@@ -1,16 +1,41 @@
 package com.fathurradhy.matchschedule.test.repository
 
-import com.fathurradhy.matchschedule.entity.MatchResponse
-import com.fathurradhy.matchschedule.entity.TeamResponse
-import com.fathurradhy.matchschedule.network.ApiRepository
-import com.fathurradhy.matchschedule.network.MyRetrofit
+import android.util.Log
+import com.fathurradhy.matchschedule.mvp.model.LeaguesResponse
+import com.fathurradhy.matchschedule.mvp.model.MatchResponse
+import com.fathurradhy.matchschedule.mvp.model.SearchResponse
+import com.fathurradhy.matchschedule.mvp.model.TeamResponse
+import com.fathurradhy.matchschedule.net.ApiRepository
+import com.fathurradhy.matchschedule.net.MyRetrofit
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class RetrofitRepository {
 
-    fun getPrevMatch(id: String, callback: MatchRepositoryCallback<MatchResponse?>) {
+    fun getSearchTeam(e: String, callback: SearchView) {
+        MyRetrofit
+                .createService(ApiRepository::class.java)
+                .getSearchTeam(e)
+                .enqueue(object : Callback<SearchResponse?> {
+                    override fun onFailure(call: Call<SearchResponse?>?, t: Throwable?) {
+                        callback.onDataError()
+                    }
+
+                    override fun onResponse(call: Call<SearchResponse?>?, response: Response<SearchResponse?>?) {
+                        response?.let {
+                            if (it.isSuccessful) {
+                                Log.e("ERRORBOS", it.body().toString())
+                                callback.onDataLoaded(it.body())
+                            } else {
+                                callback.onDataError()
+                            }
+                        }
+                    }
+                })
+    }
+
+    fun getPrevMatch(id: String, callback: MatchView) {
         MyRetrofit
                 .createService(ApiRepository::class.java)
                 .getPassMatch(id)
@@ -31,7 +56,7 @@ class RetrofitRepository {
                 })
     }
 
-    fun getNextMatch(id: String, callback: MatchRepositoryCallback<MatchResponse?>) {
+    fun getNextMatch(id: String, callback: MatchView) {
         MyRetrofit
                 .createService(ApiRepository::class.java)
                 .getNextMatch(id)
@@ -52,7 +77,7 @@ class RetrofitRepository {
                 })
     }
 
-    fun getDetailMatch(id: String, callback: MatchRepositoryCallback<MatchResponse?>) {
+    fun getDetailMatch(id: String, callback: MatchView) {
         MyRetrofit
                 .createService(ApiRepository::class.java)
                 .getMatchById(id)
@@ -73,7 +98,7 @@ class RetrofitRepository {
                 })
     }
 
-    fun getEmblemHome(id: String, callback: TeamRepositoryCallback<TeamResponse?>) {
+    fun getEmblemHome(id: String, callback: TeamView<TeamResponse?>) {
         MyRetrofit
                 .createService(ApiRepository::class.java)
                 .getTeam(id)
@@ -94,7 +119,7 @@ class RetrofitRepository {
                 })
     }
 
-    fun getEmblemAway(id: String, callback: TeamRepositoryCallback<TeamResponse?>) {
+    fun getEmblemAway(id: String, callback: TeamView<TeamResponse?>) {
         MyRetrofit
                 .createService(ApiRepository::class.java)
                 .getTeam(id)
@@ -107,6 +132,27 @@ class RetrofitRepository {
                         response?.let {
                             if (it.isSuccessful) {
                                 callback.onDataLoaded(it.body(),"away")
+                            } else {
+                                callback.onDataError()
+                            }
+                        }
+                    }
+                })
+    }
+
+    fun getLeagues(callback: LeaguesView) {
+        MyRetrofit
+                .createService(ApiRepository::class.java)
+                .getLeagues()
+                .enqueue(object : Callback<LeaguesResponse?> {
+                    override fun onFailure(call: Call<LeaguesResponse?>?, t: Throwable?) {
+                        callback.onDataError()
+                    }
+
+                    override fun onResponse(call: Call<LeaguesResponse?>?, response: Response<LeaguesResponse?>?) {
+                        response?.let {
+                            if (it.isSuccessful) {
+                                callback.onDataLoaded(it.body())
                             } else {
                                 callback.onDataError()
                             }

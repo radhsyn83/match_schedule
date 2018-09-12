@@ -1,14 +1,13 @@
-package com.fathurradhy.matchschedule.match
+package com.fathurradhy.matchschedule.mvp.presenter
 
-import com.fathurradhy.matchschedule.entity.TeamResponse
+import com.fathurradhy.matchschedule.mvp.model.TeamResponse
 import com.fathurradhy.matchschedule.test.repository.RetrofitRepository
-import com.fathurradhy.matchschedule.test.repository.TeamRepositoryCallback
+import com.fathurradhy.matchschedule.test.repository.TeamView
 
-class TeamPresenter(private val view: TeamView, private val retrofitRepository: RetrofitRepository) {
+class TeamPresenter(private val view: TeamView<TeamResponse?>, private val retrofitRepository: RetrofitRepository) {
 
     fun getEmblemHome(id: String) {
-        view.onShowLoading()
-        retrofitRepository.getEmblemHome(id, object : TeamRepositoryCallback<TeamResponse?> {
+        retrofitRepository.getEmblemHome(id, object : TeamView<TeamResponse?> {
             override fun onDataLoaded(data: TeamResponse?, side: String) {
                 view.onDataLoaded(data, side)
             }
@@ -17,12 +16,10 @@ class TeamPresenter(private val view: TeamView, private val retrofitRepository: 
                 view.onDataError()
             }
         })
-        view.onHideLoading()
     }
 
     fun getEmblemAway(id: String) {
-        view.onShowLoading()
-        retrofitRepository.getEmblemAway(id, object : TeamRepositoryCallback<TeamResponse?> {
+        retrofitRepository.getEmblemAway(id, object : TeamView<TeamResponse?> {
             override fun onDataLoaded(data: TeamResponse?, side: String) {
                 view.onDataLoaded(data, side)
             }
@@ -31,6 +28,5 @@ class TeamPresenter(private val view: TeamView, private val retrofitRepository: 
                 view.onDataError()
             }
         })
-        view.onHideLoading()
     }
 }

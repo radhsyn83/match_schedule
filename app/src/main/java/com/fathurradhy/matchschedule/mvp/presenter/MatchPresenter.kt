@@ -1,14 +1,13 @@
-package com.fathurradhy.matchschedule.match
+package com.fathurradhy.matchschedule.mvp.presenter
 
-import com.fathurradhy.matchschedule.entity.MatchResponse
+import com.fathurradhy.matchschedule.mvp.model.MatchResponse
 import com.fathurradhy.matchschedule.test.repository.RetrofitRepository
-import com.fathurradhy.matchschedule.test.repository.MatchRepositoryCallback
+import com.fathurradhy.matchschedule.test.repository.MatchView
 
 class MatchPresenter(private val view: MatchView, private val retrofitRepository: RetrofitRepository) {
 
     fun getPrevMatch(id: String) {
-        view.onShowLoading()
-        retrofitRepository.getPrevMatch(id, object : MatchRepositoryCallback<MatchResponse?> {
+        retrofitRepository.getPrevMatch(id, object : MatchView {
             override fun onDataLoaded(data: MatchResponse?) {
                 view.onDataLoaded(data)
             }
@@ -17,12 +16,10 @@ class MatchPresenter(private val view: MatchView, private val retrofitRepository
                 view.onDataError()
             }
         })
-        view.onHideLoading()
     }
 
     fun getNextMatch(id: String) {
-        view.onShowLoading()
-        retrofitRepository.getNextMatch(id, object : MatchRepositoryCallback<MatchResponse?> {
+        retrofitRepository.getNextMatch(id, object : MatchView {
             override fun onDataLoaded(data: MatchResponse?) {
                 view.onDataLoaded(data)
             }
@@ -31,12 +28,10 @@ class MatchPresenter(private val view: MatchView, private val retrofitRepository
                 view.onDataError()
             }
         })
-        view.onHideLoading()
     }
 
     fun getDetailMatch(id: String) {
-        view.onShowLoading()
-        retrofitRepository.getDetailMatch(id, object : MatchRepositoryCallback<MatchResponse?> {
+        retrofitRepository.getDetailMatch(id, object : MatchView {
             override fun onDataLoaded(data: MatchResponse?) {
                 view.onDataLoaded(data)
             }
@@ -45,6 +40,5 @@ class MatchPresenter(private val view: MatchView, private val retrofitRepository
                 view.onDataError()
             }
         })
-        view.onHideLoading()
     }
 }

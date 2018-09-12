@@ -31,7 +31,13 @@ object DateUtils {
         val dateTime = SimpleDateFormat("HH:mm:ssXXX").parse(time)
         val calendar = Calendar.getInstance()
         calendar.time = dateTime
+        return SimpleDateFormat("HH:mm").format(dateTime)
+    }
 
+    fun timeFormat2(time: String) : String {
+        val dateTime = SimpleDateFormat("HH:mm:ss").parse(time)
+        val calendar = Calendar.getInstance()
+        calendar.time = dateTime
         return SimpleDateFormat("HH:mm").format(dateTime)
     }
 

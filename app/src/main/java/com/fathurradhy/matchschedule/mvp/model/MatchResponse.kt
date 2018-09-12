@@ -1,9 +1,9 @@
-package com.fathurradhy.matchschedule.entity
+package com.fathurradhy.matchschedule.mvp.model
 
 import com.google.gson.annotations.SerializedName
 
 data class MatchResponse(
 
 	@field:SerializedName("events")
-	val events: List<EventsItem>? = null
+	val events: List<MatchItem>? = null
 )

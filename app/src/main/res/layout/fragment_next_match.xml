@@ -4,11 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/swipeRefreshLayout"
+    android:background="@color/colorPrimary"
     tools:context=".fragment.PrevMatchFragment">
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_team_next"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <Spinner
+            android:id="@+id/leagues"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="6dp"
+            android:background="@drawable/spinner"
+            android:textColor="@color/colorPrimary"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_team_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

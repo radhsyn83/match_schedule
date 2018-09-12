@@ -3,11 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
-
-    <ImageView
-        android:id="@+id/imageVIew"
-        android:layout_centerInParent="true"
-        android:src="@drawable/premier_league"
-        android:layout_width="180dp"
-        android:layout_height="180dp" />
+        <ImageView
+            android:id="@+id/imageVIew"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/ic_launcher"
+            android:layout_width="120dp"
+            android:layout_height="120dp" />
 </RelativeLayout>

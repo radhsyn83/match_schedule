@@ -1,22 +1,23 @@
 package com.fathurradhy.matchschedule.fragment
 
-import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
-import android.support.v4.view.ViewCompat
-import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import com.fathurradhy.matchschedule.R
 import com.fathurradhy.matchschedule.activity.DetailMatchActivity
 import com.fathurradhy.matchschedule.adapter.MatchAdapter
-import com.fathurradhy.matchschedule.entity.EventsItem
-import com.fathurradhy.matchschedule.entity.MatchResponse
-import com.fathurradhy.matchschedule.match.MatchPresenter
-import com.fathurradhy.matchschedule.match.MatchView
+import com.fathurradhy.matchschedule.mvp.model.LeaguesResponse
+import com.fathurradhy.matchschedule.mvp.model.MatchItem
+import com.fathurradhy.matchschedule.mvp.model.MatchResponse
+import com.fathurradhy.matchschedule.mvp.presenter.LeaguesPresenter
+import com.fathurradhy.matchschedule.mvp.presenter.MatchPresenter
+import com.fathurradhy.matchschedule.test.repository.LeaguesView
+import com.fathurradhy.matchschedule.test.repository.MatchView
 import com.fathurradhy.matchschedule.test.repository.RetrofitRepository
 import com.fathurradhy.matchschedule.utils.CustomProgressDialog
 import com.fathurradhy.matchschedule.utils.EspressoIdlingResource
@@ -24,9 +25,13 @@ import kotlinx.android.synthetic.main.fragment_next_match.*
 import org.jetbrains.anko.support.v4.startActivity
 import org.jetbrains.anko.support.v4.toast
 
-class NextMatchFragment : Fragment(), MatchView, MatchAdapter.Listener {
+class NextMatchFragment : Fragment(), MatchView, MatchAdapter.Listener, AdapterView.OnItemSelectedListener {
 
     lateinit var matchPresenter: MatchPresenter
+    private val leaguesName = ArrayList<String>()
+    private val leaguesId = ArrayList<String>()
+    private var currentLeguesId = ""
+    private var firtTimeLoad = true;
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -35,31 +40,57 @@ class NextMatchFragment : Fragment(), MatchView, MatchAdapter.Listener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        EspressoIdlingResource.increment()
-
-        matchPresenter = MatchPresenter(this , RetrofitRepository())
-        matchPresenter.getNextMatch("4328")
-
-    }
-
-    override fun onShowLoading() {
         CustomProgressDialog.showDialog(activity!!)
+        EspressoIdlingResource.increment()
+        matchPresenter = MatchPresenter(this , RetrofitRepository())
+
+        swipeRefreshLayout.setOnRefreshListener {
+            EspressoIdlingResource.increment()
+            CustomProgressDialog.showDialog(activity!!)
+            swipeRefreshLayout.isRefreshing = false
+            matchPresenter.getNextMatch(currentLeguesId)
+        }
+
+        initSpinner()
     }
 
-    override fun onHideLoading() {
-        CustomProgressDialog.stopDialog()
+    private fun initSpinner() {
+        leagues.setOnItemSelectedListener(this)
+        LeaguesPresenter(object : LeaguesView{
+            override fun onDataLoaded(data: LeaguesResponse?) {
+                val item = data?.leagues
+
+                for (i in 0 until 9) {
+                    if (item?.get(i)?.strSport == "Soccer") {
+                        leaguesId.add(item[i].idLeague.toString())
+                        item[i].strLeague?.let { leaguesName.add(it) }
+                    }
+                }
+
+                val adapter = ArrayAdapter<String>(activity,
+                        R.layout.spinner_item, leaguesName)
+
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                leagues.adapter = adapter
+
+            }
+
+            override fun onDataError() {
+
+            }
+        }, RetrofitRepository()).getLeagues()
     }
 
     override fun onDataLoaded(data: MatchResponse?) {
-        rv_team_next.layoutManager = LinearLayoutManager(activity!!)
-        rv_team_next.adapter = data!!.events?.let { MatchAdapter(it, this) }
+        rv_team_next.layoutManager = GridLayoutManager(activity!!, 2, GridLayoutManager.VERTICAL, false)
+        rv_team_next.adapter = data!!.events?.let { MatchAdapter(activity!!,it, this) }
+        CustomProgressDialog.stopDialog()
         EspressoIdlingResource.decrement()
     }
 
     override fun onDataError() { toast("Error") }
 
-    override fun onMatchClick(data: EventsItem) {
+    override fun onMatchClick(data: MatchItem) {
 
         startActivity<DetailMatchActivity>(
                 "idHomeTeam" to data.idHomeTeam,
@@ -93,4 +124,17 @@ class NextMatchFragment : Fragment(), MatchView, MatchAdapter.Listener {
         )
     }
 
+    override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        if (!firtTimeLoad) {
+            EspressoIdlingResource.increment()
+            CustomProgressDialog.showDialog(activity!!)
+        }
+
+        currentLeguesId = leaguesId[position]
+        matchPresenter.getNextMatch(currentLeguesId)
+
+        firtTimeLoad = false
+    }
 }

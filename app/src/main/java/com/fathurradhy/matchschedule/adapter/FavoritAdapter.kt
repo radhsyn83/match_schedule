@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.fathurradhy.matchschedule.R
-import com.fathurradhy.matchschedule.entity.EventsItem
-import com.fathurradhy.matchschedule.entity.MatchResponse
-import com.fathurradhy.matchschedule.match.MatchPresenter
-import com.fathurradhy.matchschedule.match.MatchView
+import com.fathurradhy.matchschedule.mvp.model.MatchItem
+import com.fathurradhy.matchschedule.mvp.model.MatchResponse
+import com.fathurradhy.matchschedule.mvp.presenter.MatchPresenter
+import com.fathurradhy.matchschedule.test.repository.MatchView
 import com.fathurradhy.matchschedule.test.repository.RetrofitRepository
 import com.fathurradhy.matchschedule.utils.DateUtils
 import kotlinx.android.synthetic.main.item_favorit.view.*
@@ -19,7 +19,7 @@ class FavoritAdapter(private val list: ArrayList<Any?>, val listener: Listener) 
     lateinit var matchPresenter: MatchPresenter
 
     interface Listener {
-        fun onMatchClick(data: EventsItem)
+        fun onMatchClick(data: MatchItem)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder{
@@ -37,9 +37,6 @@ class FavoritAdapter(private val list: ArrayList<Any?>, val listener: Listener) 
         fun bind(data: Any?) {
 
             matchPresenter = MatchPresenter(object : MatchView {
-                override fun onShowLoading() {}
-
-                override fun onHideLoading() {}
 
                 override fun onDataLoaded(data: MatchResponse?) {
                     val match = data?.events?.get(0)

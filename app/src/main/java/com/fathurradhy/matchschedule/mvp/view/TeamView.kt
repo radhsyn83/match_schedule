@@ -1,6 +1,6 @@
 package com.fathurradhy.matchschedule.test.repository
 
-interface TeamRepositoryCallback<T> {
+interface TeamView<T> {
 
     fun onDataLoaded(data: T?, side:String)
     fun onDataError()
