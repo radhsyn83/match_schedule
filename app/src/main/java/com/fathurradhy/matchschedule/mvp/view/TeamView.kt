@@ -1,7 +1,9 @@
 package com.fathurradhy.matchschedule.test.repository
 
-interface TeamView<T> {
+import com.fathurradhy.matchschedule.mvp.model.TeamResponse
 
-    fun onDataLoaded(data: T?, side:String)
+interface TeamView {
+
+    fun onDataLoaded(data: TeamResponse?, side:String)
     fun onDataError()
 }

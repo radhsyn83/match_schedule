@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.activity_detail_match.*
 import org.jetbrains.anko.db.*
 import org.jetbrains.anko.design.snackbar
 
-class DetailMatchActivity : AppCompatActivity(), TeamView<TeamResponse?> {
+class DetailMatchActivity : AppCompatActivity(), TeamView {
     override fun onDataLoaded(data: TeamResponse?, side: String) {
         if (side.equals("home")) {
             Glide.with(this@DetailMatchActivity)

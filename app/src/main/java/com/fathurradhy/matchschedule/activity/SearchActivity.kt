@@ -22,6 +22,11 @@ class SearchActivity : AppCompatActivity(), SearchView, MatchSearchAdapter.Liste
     lateinit var searchPresenter: SearchPresenter
     private lateinit var query: String
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)

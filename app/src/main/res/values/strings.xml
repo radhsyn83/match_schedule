@@ -3,4 +3,11 @@
 
     <string name="team">Teams</string>
     <string name="search_team">Search team...</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="leagues_bus">LoadLeaguesBus</string>
+    <string name="schedule">Schedule</string>
+    <string name="player">Players</string>
+    <string name="close">Close</string>
 </resources>

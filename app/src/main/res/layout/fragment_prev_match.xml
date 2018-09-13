@@ -15,9 +15,12 @@
             android:id="@+id/leagues"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_margin="6dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
             android:background="@drawable/spinner"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="@android:color/black"/>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_team_prev"
             android:layout_width="match_parent"

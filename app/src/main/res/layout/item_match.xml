@@ -31,8 +31,9 @@
                     android:layout_centerHorizontal="true"
                     android:text="02 Sep 2018"
                     android:textSize="12dp"
-                    android:textColor="@color/colorPrimary"
-                    android:textAlignment="center"/>
+                    android:textColor="@android:color/black"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/chivo_regular"/>
                 <TextView
                     android:layout_below="@id/date_match"
                     android:id="@+id/time_match"
@@ -41,13 +42,15 @@
                     android:layout_centerHorizontal="true"
                     android:text="22:00"
                     android:textSize="12dp"
-                    android:textColor="@color/colorPrimary"
-                    android:textAlignment="center"/>
+                    android:textColor="@android:color/black"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/chivo_regular"/>
                 <ImageView
                     android:id="@+id/reminder"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_bell"
+                    android:tint="@color/colorPrimary"
                     android:layout_margin="3dp"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true" />
@@ -78,7 +81,8 @@
                         android:text="0"
                         android:textSize="16dp"
                         android:textAlignment="center"
-                        android:textColor="@color/colorPrimary"
+                        android:fontFamily="@font/chivo_regular"
+                        android:textColor="@android:color/black"
                         android:layout_height="match_parent"/>
                 </LinearLayout>
 
@@ -88,6 +92,7 @@
                     android:gravity="center"
                     android:text="VS"
                     android:textSize="12dp"
+                    android:fontFamily="@font/montserrat_bold"
                     android:textColor="@color/colorPrimary"/>
 
                 <LinearLayout
@@ -105,8 +110,9 @@
                         android:layout_width="match_parent"
                         android:text="0"
                         android:textSize="16dp"
+                        android:fontFamily="@font/chivo_regular"
                         android:textAlignment="center"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@android:color/black"
                         android:layout_height="match_parent"/>
                 </LinearLayout>
             </LinearLayout>

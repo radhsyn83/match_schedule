@@ -1,0 +1,13 @@
+<tabs>
+    <tab
+        id="@+id/tab_match"
+        icon="@drawable/ic_calendar"
+        title="Schedule"
+        barColorWhenSelected="@color/colorPrimary"/>
+
+    <tab
+        id="@+id/tab_team"
+        icon="@drawable/ic_emblem"
+        title="Teams"
+        barColorWhenSelected="@color/colorTeam"/>
+</tabs>

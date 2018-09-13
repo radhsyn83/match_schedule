@@ -61,10 +61,26 @@ dependencies {
     //MaterialSearchView
     implementation 'com.miguelcatalan:materialsearchview:1.4.0'
 
+    //BottomBar
+    implementation 'com.roughike:bottom-bar:2.3.1'
+
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     kapt 'com.github.bumptech.glide:compiler:4.7.1'
+
+    //EventBus
+    implementation 'org.greenrobot:eventbus:3.1.1'
+
+    //Keyboard Event
+    implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.1.0'
+
+    //CircleImage
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+
+    // Material Dialog
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+    implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
 
     testImplementation 'com.nhaarman:mockito-kotlin:1.5.0'
     testImplementation 'org.mockito:mockito-inline:2.18.0'

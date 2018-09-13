@@ -44,7 +44,7 @@ class MatchAdapter(private val mContext: Context, private val list: List<MatchIt
         holder.bind(list[position])
     }
 
-    inner class ViewHolder(view : View) : RecyclerView.ViewHolder(view), TeamView<TeamResponse?> {
+    inner class ViewHolder(view : View) : RecyclerView.ViewHolder(view), TeamView {
         private var isAway = false
         private var isHome = false
         private var repeat = 0
