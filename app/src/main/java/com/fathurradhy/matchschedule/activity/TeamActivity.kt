@@ -19,10 +19,10 @@ import com.fathurradhy.matchschedule.mvp.presenter.PlayerPresenter
 import com.fathurradhy.matchschedule.test.repository.PlayerView
 import com.fathurradhy.matchschedule.test.repository.RetrofitRepository
 import com.fathurradhy.matchschedule.utils.CustomProgressDialog
-import kotlinx.android.synthetic.main.activity_team_detail.*
-import org.jetbrains.anko.toast
+import kotlinx.android.synthetic.main.activity_team.*
+import org.jetbrains.anko.startActivity
 
-class TeamDetailActivity : AppCompatActivity() {
+class TeamActivity : AppCompatActivity() {
 
     private var mMaterialDialog: MaterialDialog? = null
     private var menuItem: MenuItem? = null
@@ -36,7 +36,7 @@ class TeamDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_team_detail)
+        setContentView(R.layout.activity_team)
 
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -95,7 +95,33 @@ class TeamDetailActivity : AppCompatActivity() {
         player_rv.layoutManager = LinearLayoutManager(this)
         player_rv.adapter = PlayerAdapter(this, playerItem, object : PlayerAdapter.Listener{
             override fun onMatchClick(data: PlayerItem) {
-                data.strPlayer?.let { toast(it) }
+                startActivity<PlayerActivity>(
+                        "idPlayer" to data.idPlayer,
+                        "strPlayer" to data.strPlayer,
+                        "idTeam" to data.idTeam,
+                        "idSoccerXML" to data.idSoccerXML,
+                        "strNationality" to data.strNationality,
+                        "strTeam" to data.strTeam,
+                        "strSport" to data.strSport,
+                        "dateBorn" to data.dateBorn,
+                        "dateSigned" to data.dateSigned,
+                        "strSigning" to data.strSigning,
+                        "strWage" to data.strWage,
+                        "strBirthLocation" to data.strBirthLocation,
+                        "strDescriptionEN" to data.strDescriptionEN,
+                        "strFacebook" to data.strFacebook,
+                        "strPosition" to data.strPosition,
+                        "strGender" to data.strGender,
+                        "strTwitter" to data.strTwitter,
+                        "strInstagram" to data.strInstagram,
+                        "strHeight" to data.strHeight,
+                        "strWeight" to data.strWeight,
+                        "strThumb" to data.strThumb,
+                        "strCutout" to data.strCutout,
+                        "strBanner" to data.strBanner,
+                        "strFanart1" to data.strFanart1,
+                        "strFanart2" to data.strFanart2
+                )
             }
         })
     }

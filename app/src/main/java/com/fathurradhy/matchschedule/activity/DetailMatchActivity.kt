@@ -57,6 +57,7 @@ class DetailMatchActivity : AppCompatActivity(), TeamView {
     private var menuItem: MenuItem? = null
     private var isFavorite: Boolean = false
     private lateinit var idEvent: String
+    private lateinit var from: String
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
@@ -69,6 +70,8 @@ class DetailMatchActivity : AppCompatActivity(), TeamView {
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
+
+        from = resources.getString(R.string.match)
 
         if (intent.extras!!.getString("EXTRA_ANIMAL_IMAGE_TRANSITION_NAME") != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -128,7 +131,8 @@ class DetailMatchActivity : AppCompatActivity(), TeamView {
             database.use {
                 insert(
                         Favorite.TABLE_FAVORITE,
-                        Favorite.MATCH_ID to idEvent
+                        Favorite.FAVORITE_ID to idEvent,
+                        Favorite.FAVORITE_FROM to from
                 )
             }
 
@@ -144,7 +148,7 @@ class DetailMatchActivity : AppCompatActivity(), TeamView {
     private fun deleteFavorit(){
         try {
             database.use {
-                delete(Favorite.TABLE_FAVORITE, Favorite.MATCH_ID + " = {idEvent}", "idEvent" to idEvent)
+                delete(Favorite.TABLE_FAVORITE, Favorite.FAVORITE_ID + " = {idEvent}", "idEvent" to idEvent)
             }
 
             isFavorite = false
@@ -159,8 +163,8 @@ class DetailMatchActivity : AppCompatActivity(), TeamView {
     private fun checkFavorit() {
         try {
             database.use {
-                select(Favorite.TABLE_FAVORITE,Favorite.MATCH_ID)
-                        .whereArgs(Favorite.MATCH_ID + "= {idEvent}", "idEvent" to idEvent)
+                select(Favorite.TABLE_FAVORITE,Favorite.FAVORITE_ID)
+                        .whereArgs(Favorite.FAVORITE_ID + "= {idEvent} " + Favorite.FAVORITE_FROM + "= " + from, "idEvent" to idEvent)
                         .exec {
                             parseOpt(object: MapRowParser<Boolean>{
                                 override fun parseRow(columns: Map<String, Any?>): Boolean {

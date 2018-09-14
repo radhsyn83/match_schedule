@@ -19,6 +19,8 @@ import org.jetbrains.anko.startActivity
 
 class FavoritActivity : AppCompatActivity() {
 
+    private lateinit var from: String
+
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
@@ -44,13 +46,13 @@ class FavoritActivity : AppCompatActivity() {
             database.use {
                 val idEvent = ArrayList<Any?>()
 
-                select(Favorite.TABLE_FAVORITE, Favorite.MATCH_ID)
-                        .orderBy(Favorite.MATCH_ID, SqlOrderDirection.DESC)
+                select(Favorite.TABLE_FAVORITE, Favorite.FAVORITE_ID)
+                        .orderBy(Favorite.FAVORITE_ID, SqlOrderDirection.DESC)
                         .exec {
                             parseList(object: MapRowParser<ArrayList<Any?>> {
                                 override fun parseRow(columns: Map<String, Any?>): ArrayList<Any?> {
                                     if (columnCount > 0){
-                                        idEvent.add(columns.getValue(Favorite.MATCH_ID))
+                                        idEvent.add(columns.getValue(Favorite.FAVORITE_ID))
                                     }
 
                                     return idEvent

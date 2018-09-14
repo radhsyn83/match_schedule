@@ -10,9 +10,8 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.fathurradhy.matchschedule.R
-import com.fathurradhy.matchschedule.activity.DetailMatchActivity
 import com.fathurradhy.matchschedule.activity.FavoritActivity
-import com.fathurradhy.matchschedule.activity.TeamDetailActivity
+import com.fathurradhy.matchschedule.activity.TeamActivity
 import com.fathurradhy.matchschedule.adapter.TeamAdapter
 import com.fathurradhy.matchschedule.mvp.model.EventBusModel
 import com.fathurradhy.matchschedule.mvp.model.LeaguesResponse
@@ -89,7 +88,7 @@ class TeamFragment : Fragment(), TeamView, TeamAdapter.Listener, AdapterView.OnI
     override fun onDataError() {}
 
     override fun onMatchClick(data: TeamsItem) {
-        startActivity<TeamDetailActivity>(
+        startActivity<TeamActivity>(
                 "idTeam" to data.idTeam,
                 "strTeam" to data.strTeam,
                 "strSport" to data.strSport,

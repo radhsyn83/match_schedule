@@ -28,9 +28,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:textColor="@android:color/white"
-                        android:textSize="16dp"
                         android:gravity="center_vertical"
-                        android:fontFamily="@font/montserrat_bold"
+                        android:fontFamily="@font/chivo_regular"
                         android:letterSpacing="0.1"
                         android:text="@string/team"/>
                     <LinearLayout

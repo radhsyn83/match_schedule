@@ -18,12 +18,23 @@
                                 <PersistentState>
                                   <option name="children">
                                     <map>
+                                      <entry key="backgroundImage">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="scalingPercent" value="98" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
                                       <entry key="foregroundImage">
                                         <value>
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="scalingPercent" value="48" />
+                                                <entry key="scalingPercent" value="33" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -33,9 +44,9 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="backgroundAssetType" value="COLOR" />
                                       <entry key="backgroundColor" value="3a0640" />
-                                      <entry key="foregroundImage" value="D:\sil-soccer.png" />
+                                      <entry key="backgroundImage" value="D:\Capture.PNG" />
+                                      <entry key="foregroundImage" value="D:\calendar(1).png" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -76,9 +87,10 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_star_black_24dp" />
-                            <entry key="sourceFile" value="D:\bell.svg" />
+                            <entry key="outputName" value="ic_users_group" />
+                            <entry key="sourceFile" value="D:\users-group.svg" />
                           </map>
                         </option>
                       </PersistentState>
